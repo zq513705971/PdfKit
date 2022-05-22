@@ -475,5 +475,19 @@ namespace PdfKit
                     pdfReader.Close();
             }
         }
+        
+        private void pdfViewerMain_DragEnter(object sender, DragEventArgs e)
+        {
+            try
+            {
+                string path = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
+                pdfViewerMain.Document = PdfiumViewer.PdfDocument.Load(path);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "异常", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }            
+        }
+        
     }
 }

@@ -67,27 +67,29 @@
             this.btnSelectWatermarkPdf = new System.Windows.Forms.Button();
             this.tWatermarkPdf = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.backgroundWorkerSplit = new System.ComponentModel.BackgroundWorker();
-            this.backgroundWorkerMerge = new System.ComponentModel.BackgroundWorker();
-            this.backgroundWorkerWatermark = new System.ComponentModel.BackgroundWorker();
             this.tabPageEncryption = new System.Windows.Forms.TabPage();
-            this.groupBoxEncrypt = new System.Windows.Forms.GroupBox();
             this.groupBoxDecrypt = new System.Windows.Forms.GroupBox();
-            this.btnEncryptPdf = new System.Windows.Forms.Button();
-            this.tEncryptPdf = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
+            this.btnRemovePassProtect = new System.Windows.Forms.Button();
+            this.tDecryptEditPass = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.btnDecryptPdf = new System.Windows.Forms.Button();
             this.tDecryptPdf = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.tEncryptEditPass = new System.Windows.Forms.TextBox();
-            this.tEncryptReadPass = new System.Windows.Forms.TextBox();
-            this.btnEncryptProtect = new System.Windows.Forms.Button();
+            this.groupBoxEncrypt = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.tDecryptEditPass = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.btnRemovePassProtect = new System.Windows.Forms.Button();
+            this.btnEncryptProtect = new System.Windows.Forms.Button();
+            this.tEncryptReadPass = new System.Windows.Forms.TextBox();
+            this.tEncryptEditPass = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btnEncryptPdf = new System.Windows.Forms.Button();
+            this.tEncryptPdf = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.tabPageViewer = new System.Windows.Forms.TabPage();
+            this.pdfViewerMain = new PdfiumViewer.PdfViewer();
+            this.backgroundWorkerSplit = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerMerge = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerWatermark = new System.ComponentModel.BackgroundWorker();
             this.tabControlMain.SuspendLayout();
             this.tabPageHome.SuspendLayout();
             this.panelHome.SuspendLayout();
@@ -100,8 +102,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numAngle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFontSize)).BeginInit();
             this.tabPageEncryption.SuspendLayout();
-            this.groupBoxEncrypt.SuspendLayout();
             this.groupBoxDecrypt.SuspendLayout();
+            this.groupBoxEncrypt.SuspendLayout();
+            this.tabPageViewer.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -111,6 +114,7 @@
             this.tabControlMain.Controls.Add(this.tabPageMegre);
             this.tabControlMain.Controls.Add(this.tabPageWatermark);
             this.tabControlMain.Controls.Add(this.tabPageEncryption);
+            this.tabControlMain.Controls.Add(this.tabPageViewer);
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this.tabControlMain.ItemSize = new System.Drawing.Size(40, 100);
@@ -151,7 +155,7 @@
             this.lbVer.Name = "lbVer";
             this.lbVer.Size = new System.Drawing.Size(142, 15);
             this.lbVer.TabIndex = 2;
-            this.lbVer.Text = "version：0.0.5.21";
+            this.lbVer.Text = "version：1.0.5.21";
             // 
             // lbCopyright
             // 
@@ -532,25 +536,6 @@
             this.tabPageEncryption.Text = "加密";
             this.tabPageEncryption.UseVisualStyleBackColor = true;
             // 
-            // groupBoxEncrypt
-            // 
-            this.groupBoxEncrypt.Controls.Add(this.label12);
-            this.groupBoxEncrypt.Controls.Add(this.btnEncryptProtect);
-            this.groupBoxEncrypt.Controls.Add(this.tEncryptReadPass);
-            this.groupBoxEncrypt.Controls.Add(this.tEncryptEditPass);
-            this.groupBoxEncrypt.Controls.Add(this.label11);
-            this.groupBoxEncrypt.Controls.Add(this.label10);
-            this.groupBoxEncrypt.Controls.Add(this.btnEncryptPdf);
-            this.groupBoxEncrypt.Controls.Add(this.tEncryptPdf);
-            this.groupBoxEncrypt.Controls.Add(this.label8);
-            this.groupBoxEncrypt.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxEncrypt.Location = new System.Drawing.Point(0, 0);
-            this.groupBoxEncrypt.Name = "groupBoxEncrypt";
-            this.groupBoxEncrypt.Size = new System.Drawing.Size(798, 236);
-            this.groupBoxEncrypt.TabIndex = 0;
-            this.groupBoxEncrypt.TabStop = false;
-            this.groupBoxEncrypt.Text = "加密";
-            // 
             // groupBoxDecrypt
             // 
             this.groupBoxDecrypt.Controls.Add(this.btnRemovePassProtect);
@@ -567,32 +552,32 @@
             this.groupBoxDecrypt.TabStop = false;
             this.groupBoxDecrypt.Text = "解密";
             // 
-            // btnEncryptPdf
+            // btnRemovePassProtect
             // 
-            this.btnEncryptPdf.Location = new System.Drawing.Point(651, 42);
-            this.btnEncryptPdf.Name = "btnEncryptPdf";
-            this.btnEncryptPdf.Size = new System.Drawing.Size(75, 33);
-            this.btnEncryptPdf.TabIndex = 5;
-            this.btnEncryptPdf.Text = "浏览";
-            this.btnEncryptPdf.UseVisualStyleBackColor = true;
-            this.btnEncryptPdf.Click += new System.EventHandler(this.btnEncryptPdf_Click);
+            this.btnRemovePassProtect.Location = new System.Drawing.Point(633, 82);
+            this.btnRemovePassProtect.Name = "btnRemovePassProtect";
+            this.btnRemovePassProtect.Size = new System.Drawing.Size(93, 58);
+            this.btnRemovePassProtect.TabIndex = 11;
+            this.btnRemovePassProtect.Text = "移除密码";
+            this.btnRemovePassProtect.UseVisualStyleBackColor = true;
+            this.btnRemovePassProtect.Click += new System.EventHandler(this.btnRemovePassProtect_Click);
             // 
-            // tEncryptPdf
+            // tDecryptEditPass
             // 
-            this.tEncryptPdf.Location = new System.Drawing.Point(142, 45);
-            this.tEncryptPdf.Name = "tEncryptPdf";
-            this.tEncryptPdf.ReadOnly = true;
-            this.tEncryptPdf.Size = new System.Drawing.Size(488, 25);
-            this.tEncryptPdf.TabIndex = 4;
+            this.tDecryptEditPass.Location = new System.Drawing.Point(142, 77);
+            this.tDecryptEditPass.Name = "tDecryptEditPass";
+            this.tDecryptEditPass.PasswordChar = '*';
+            this.tDecryptEditPass.Size = new System.Drawing.Size(153, 25);
+            this.tDecryptEditPass.TabIndex = 10;
             // 
-            // label8
+            // label13
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(57, 48);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(82, 15);
-            this.label8.TabIndex = 3;
-            this.label8.Text = "选择文件：";
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(57, 80);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(82, 15);
+            this.label13.TabIndex = 9;
+            this.label13.Text = "编辑密码：";
             // 
             // btnDecryptPdf
             // 
@@ -621,49 +606,24 @@
             this.label9.TabIndex = 3;
             this.label9.Text = "选择文件：";
             // 
-            // label10
+            // groupBoxEncrypt
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(57, 85);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(82, 15);
-            this.label10.TabIndex = 6;
-            this.label10.Text = "编辑密码：";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(57, 119);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(82, 15);
-            this.label11.TabIndex = 7;
-            this.label11.Text = "打开密码：";
-            // 
-            // tEncryptEditPass
-            // 
-            this.tEncryptEditPass.Location = new System.Drawing.Point(142, 82);
-            this.tEncryptEditPass.Name = "tEncryptEditPass";
-            this.tEncryptEditPass.PasswordChar = '*';
-            this.tEncryptEditPass.Size = new System.Drawing.Size(153, 25);
-            this.tEncryptEditPass.TabIndex = 8;
-            // 
-            // tEncryptReadPass
-            // 
-            this.tEncryptReadPass.Location = new System.Drawing.Point(142, 116);
-            this.tEncryptReadPass.Name = "tEncryptReadPass";
-            this.tEncryptReadPass.PasswordChar = '*';
-            this.tEncryptReadPass.Size = new System.Drawing.Size(153, 25);
-            this.tEncryptReadPass.TabIndex = 9;
-            // 
-            // btnEncryptProtect
-            // 
-            this.btnEncryptProtect.Location = new System.Drawing.Point(633, 85);
-            this.btnEncryptProtect.Name = "btnEncryptProtect";
-            this.btnEncryptProtect.Size = new System.Drawing.Size(93, 58);
-            this.btnEncryptProtect.TabIndex = 10;
-            this.btnEncryptProtect.Text = "添加密码";
-            this.btnEncryptProtect.UseVisualStyleBackColor = true;
-            this.btnEncryptProtect.Click += new System.EventHandler(this.btnEncryptProtect_Click);
+            this.groupBoxEncrypt.Controls.Add(this.label12);
+            this.groupBoxEncrypt.Controls.Add(this.btnEncryptProtect);
+            this.groupBoxEncrypt.Controls.Add(this.tEncryptReadPass);
+            this.groupBoxEncrypt.Controls.Add(this.tEncryptEditPass);
+            this.groupBoxEncrypt.Controls.Add(this.label11);
+            this.groupBoxEncrypt.Controls.Add(this.label10);
+            this.groupBoxEncrypt.Controls.Add(this.btnEncryptPdf);
+            this.groupBoxEncrypt.Controls.Add(this.tEncryptPdf);
+            this.groupBoxEncrypt.Controls.Add(this.label8);
+            this.groupBoxEncrypt.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxEncrypt.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxEncrypt.Name = "groupBoxEncrypt";
+            this.groupBoxEncrypt.Size = new System.Drawing.Size(798, 236);
+            this.groupBoxEncrypt.TabIndex = 0;
+            this.groupBoxEncrypt.TabStop = false;
+            this.groupBoxEncrypt.Text = "加密";
             // 
             // label12
             // 
@@ -675,38 +635,105 @@
             this.label12.TabIndex = 11;
             this.label12.Text = "(可为空)";
             // 
-            // tDecryptEditPass
+            // btnEncryptProtect
             // 
-            this.tDecryptEditPass.Location = new System.Drawing.Point(142, 77);
-            this.tDecryptEditPass.Name = "tDecryptEditPass";
-            this.tDecryptEditPass.PasswordChar = '*';
-            this.tDecryptEditPass.Size = new System.Drawing.Size(153, 25);
-            this.tDecryptEditPass.TabIndex = 10;
+            this.btnEncryptProtect.Location = new System.Drawing.Point(633, 85);
+            this.btnEncryptProtect.Name = "btnEncryptProtect";
+            this.btnEncryptProtect.Size = new System.Drawing.Size(93, 58);
+            this.btnEncryptProtect.TabIndex = 10;
+            this.btnEncryptProtect.Text = "添加密码";
+            this.btnEncryptProtect.UseVisualStyleBackColor = true;
+            this.btnEncryptProtect.Click += new System.EventHandler(this.btnEncryptProtect_Click);
             // 
-            // label13
+            // tEncryptReadPass
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(57, 80);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(82, 15);
-            this.label13.TabIndex = 9;
-            this.label13.Text = "编辑密码：";
+            this.tEncryptReadPass.Location = new System.Drawing.Point(142, 116);
+            this.tEncryptReadPass.Name = "tEncryptReadPass";
+            this.tEncryptReadPass.PasswordChar = '*';
+            this.tEncryptReadPass.Size = new System.Drawing.Size(153, 25);
+            this.tEncryptReadPass.TabIndex = 9;
             // 
-            // btnRemovePassProtect
+            // tEncryptEditPass
             // 
-            this.btnRemovePassProtect.Location = new System.Drawing.Point(633, 82);
-            this.btnRemovePassProtect.Name = "btnRemovePassProtect";
-            this.btnRemovePassProtect.Size = new System.Drawing.Size(93, 58);
-            this.btnRemovePassProtect.TabIndex = 11;
-            this.btnRemovePassProtect.Text = "移除密码";
-            this.btnRemovePassProtect.UseVisualStyleBackColor = true;
-            this.btnRemovePassProtect.Click += new System.EventHandler(this.btnRemovePassProtect_Click);
+            this.tEncryptEditPass.Location = new System.Drawing.Point(142, 82);
+            this.tEncryptEditPass.Name = "tEncryptEditPass";
+            this.tEncryptEditPass.PasswordChar = '*';
+            this.tEncryptEditPass.Size = new System.Drawing.Size(153, 25);
+            this.tEncryptEditPass.TabIndex = 8;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(57, 119);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(82, 15);
+            this.label11.TabIndex = 7;
+            this.label11.Text = "打开密码：";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(57, 85);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(82, 15);
+            this.label10.TabIndex = 6;
+            this.label10.Text = "编辑密码：";
+            // 
+            // btnEncryptPdf
+            // 
+            this.btnEncryptPdf.Location = new System.Drawing.Point(651, 42);
+            this.btnEncryptPdf.Name = "btnEncryptPdf";
+            this.btnEncryptPdf.Size = new System.Drawing.Size(75, 33);
+            this.btnEncryptPdf.TabIndex = 5;
+            this.btnEncryptPdf.Text = "浏览";
+            this.btnEncryptPdf.UseVisualStyleBackColor = true;
+            this.btnEncryptPdf.Click += new System.EventHandler(this.btnEncryptPdf_Click);
+            // 
+            // tEncryptPdf
+            // 
+            this.tEncryptPdf.Location = new System.Drawing.Point(142, 45);
+            this.tEncryptPdf.Name = "tEncryptPdf";
+            this.tEncryptPdf.ReadOnly = true;
+            this.tEncryptPdf.Size = new System.Drawing.Size(488, 25);
+            this.tEncryptPdf.TabIndex = 4;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(57, 48);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(82, 15);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "选择文件：";
+            // 
+            // tabPageViewer
+            // 
+            this.tabPageViewer.Controls.Add(this.pdfViewerMain);
+            this.tabPageViewer.Location = new System.Drawing.Point(104, 4);
+            this.tabPageViewer.Name = "tabPageViewer";
+            this.tabPageViewer.Size = new System.Drawing.Size(798, 509);
+            this.tabPageViewer.TabIndex = 4;
+            this.tabPageViewer.Text = "Pdf查看";
+            this.tabPageViewer.UseVisualStyleBackColor = true;
+            // 
+            // pdfViewerMain
+            // 
+            this.pdfViewerMain.AllowDrop = true;
+            this.pdfViewerMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pdfViewerMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pdfViewerMain.Location = new System.Drawing.Point(0, 0);
+            this.pdfViewerMain.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.pdfViewerMain.Name = "pdfViewerMain";
+            this.pdfViewerMain.Size = new System.Drawing.Size(798, 509);
+            this.pdfViewerMain.TabIndex = 2;
+            this.pdfViewerMain.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitBest;
+            this.pdfViewerMain.DragEnter += new System.Windows.Forms.DragEventHandler(this.pdfViewerMain_DragEnter);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.ClientSize = new System.Drawing.Size(906, 517);
             this.Controls.Add(this.tabControlMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -731,10 +758,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.numAngle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFontSize)).EndInit();
             this.tabPageEncryption.ResumeLayout(false);
-            this.groupBoxEncrypt.ResumeLayout(false);
-            this.groupBoxEncrypt.PerformLayout();
             this.groupBoxDecrypt.ResumeLayout(false);
             this.groupBoxDecrypt.PerformLayout();
+            this.groupBoxEncrypt.ResumeLayout(false);
+            this.groupBoxEncrypt.PerformLayout();
+            this.tabPageViewer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -800,6 +828,8 @@
         private System.Windows.Forms.TextBox tDecryptEditPass;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button btnRemovePassProtect;
+        private System.Windows.Forms.TabPage tabPageViewer;
+        private PdfiumViewer.PdfViewer pdfViewerMain;
     }
 }
 
