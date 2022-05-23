@@ -38,8 +38,6 @@
             this.lbHome = new System.Windows.Forms.Label();
             this.tabPageMegre = new System.Windows.Forms.TabPage();
             this.groupBoxMerge = new System.Windows.Forms.GroupBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             this.lbMergeMsg = new System.Windows.Forms.Label();
             this.btnMergeClear = new System.Windows.Forms.Button();
             this.btnMergePdf = new System.Windows.Forms.Button();
@@ -50,6 +48,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.listBoxMerge = new System.Windows.Forms.ListBox();
             this.groupBoxSplit = new System.Windows.Forms.GroupBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.chAutoChecked = new System.Windows.Forms.CheckBox();
             this.btnViewPdfSplit = new System.Windows.Forms.Button();
             this.lbSplitMsg = new System.Windows.Forms.Label();
@@ -97,6 +96,9 @@
             this.backgroundWorkerMerge = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerWatermark = new System.ComponentModel.BackgroundWorker();
             this.toolTipMain = new System.Windows.Forms.ToolTip(this.components);
+            this.imageListMain = new System.Windows.Forms.ImageList(this.components);
+            this.chbSplitAll = new System.Windows.Forms.CheckBox();
+            this.lbEmail = new System.Windows.Forms.LinkLabel();
             this.tabControlMain.SuspendLayout();
             this.tabPageHome.SuspendLayout();
             this.panelHome.SuspendLayout();
@@ -120,8 +122,10 @@
             this.tabControlMain.Controls.Add(this.tabPageMegre);
             this.tabControlMain.Controls.Add(this.tabPageWatermark);
             this.tabControlMain.Controls.Add(this.tabPageEncryption);
+            this.tabControlMain.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.tabControlMain.ImageList = this.imageListMain;
             this.tabControlMain.ItemSize = new System.Drawing.Size(40, 100);
             this.tabControlMain.Location = new System.Drawing.Point(0, 0);
             this.tabControlMain.Multiline = true;
@@ -134,6 +138,8 @@
             // tabPageHome
             // 
             this.tabPageHome.Controls.Add(this.panelHome);
+            this.tabPageHome.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabPageHome.ImageIndex = 0;
             this.tabPageHome.Location = new System.Drawing.Point(104, 4);
             this.tabPageHome.Name = "tabPageHome";
             this.tabPageHome.Padding = new System.Windows.Forms.Padding(3);
@@ -145,6 +151,7 @@
             // panelHome
             // 
             this.panelHome.AllowDrop = true;
+            this.panelHome.Controls.Add(this.lbEmail);
             this.panelHome.Controls.Add(this.lbVer);
             this.panelHome.Controls.Add(this.lbCopyright);
             this.panelHome.Controls.Add(this.lbHome);
@@ -167,18 +174,18 @@
             // lbCopyright
             // 
             this.lbCopyright.AutoSize = true;
-            this.lbCopyright.Location = new System.Drawing.Point(571, 441);
+            this.lbCopyright.Location = new System.Drawing.Point(555, 448);
             this.lbCopyright.Name = "lbCopyright";
-            this.lbCopyright.Size = new System.Drawing.Size(173, 15);
+            this.lbCopyright.Size = new System.Drawing.Size(37, 15);
             this.lbCopyright.TabIndex = 1;
-            this.lbCopyright.Text = "明月 513705971@qq.com";
+            this.lbCopyright.Text = "明月";
             // 
             // lbHome
             // 
             this.lbHome.AutoSize = true;
             this.lbHome.Font = new System.Drawing.Font("华文隶书", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbHome.ForeColor = System.Drawing.Color.Blue;
-            this.lbHome.Location = new System.Drawing.Point(181, 142);
+            this.lbHome.Location = new System.Drawing.Point(140, 149);
             this.lbHome.Name = "lbHome";
             this.lbHome.Size = new System.Drawing.Size(304, 81);
             this.lbHome.TabIndex = 0;
@@ -188,18 +195,17 @@
             // 
             this.tabPageMegre.Controls.Add(this.groupBoxMerge);
             this.tabPageMegre.Controls.Add(this.groupBoxSplit);
+            this.tabPageMegre.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabPageMegre.Location = new System.Drawing.Point(104, 4);
             this.tabPageMegre.Name = "tabPageMegre";
             this.tabPageMegre.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageMegre.Size = new System.Drawing.Size(798, 509);
             this.tabPageMegre.TabIndex = 1;
-            this.tabPageMegre.Text = "分拆合并";
+            this.tabPageMegre.Text = "分拆/合并";
             this.tabPageMegre.UseVisualStyleBackColor = true;
             // 
             // groupBoxMerge
             // 
-            this.groupBoxMerge.Controls.Add(this.label15);
-            this.groupBoxMerge.Controls.Add(this.label14);
             this.groupBoxMerge.Controls.Add(this.lbMergeMsg);
             this.groupBoxMerge.Controls.Add(this.btnMergeClear);
             this.groupBoxMerge.Controls.Add(this.btnMergePdf);
@@ -209,38 +215,18 @@
             this.groupBoxMerge.Controls.Add(this.btnMergeAdd);
             this.groupBoxMerge.Controls.Add(this.groupBox2);
             this.groupBoxMerge.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxMerge.Location = new System.Drawing.Point(3, 195);
+            this.groupBoxMerge.Location = new System.Drawing.Point(3, 215);
             this.groupBoxMerge.Name = "groupBoxMerge";
-            this.groupBoxMerge.Size = new System.Drawing.Size(792, 311);
+            this.groupBoxMerge.Size = new System.Drawing.Size(792, 291);
             this.groupBoxMerge.TabIndex = 2;
             this.groupBoxMerge.TabStop = false;
             this.groupBoxMerge.Text = "合并";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.ForeColor = System.Drawing.Color.Blue;
-            this.label15.Location = new System.Drawing.Point(544, 256);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(182, 15);
-            this.label15.TabIndex = 10;
-            this.label15.Text = "2.双击列表项查看pdf内容";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.ForeColor = System.Drawing.Color.Blue;
-            this.label14.Location = new System.Drawing.Point(544, 236);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(152, 15);
-            this.label14.TabIndex = 9;
-            this.label14.Text = "1.支持添加pdf和图片";
             // 
             // lbMergeMsg
             // 
             this.lbMergeMsg.AutoSize = true;
             this.lbMergeMsg.ForeColor = System.Drawing.Color.Red;
-            this.lbMergeMsg.Location = new System.Drawing.Point(17, 289);
+            this.lbMergeMsg.Location = new System.Drawing.Point(17, 266);
             this.lbMergeMsg.Name = "lbMergeMsg";
             this.lbMergeMsg.Size = new System.Drawing.Size(31, 15);
             this.lbMergeMsg.TabIndex = 8;
@@ -260,6 +246,7 @@
             // btnMergePdf
             // 
             this.btnMergePdf.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMergePdf.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnMergePdf.Location = new System.Drawing.Point(625, 45);
             this.btnMergePdf.Name = "btnMergePdf";
             this.btnMergePdf.Size = new System.Drawing.Size(101, 68);
@@ -313,10 +300,10 @@
             this.groupBox2.Controls.Add(this.listBoxMerge);
             this.groupBox2.Location = new System.Drawing.Point(16, 24);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(522, 253);
+            this.groupBox2.Size = new System.Drawing.Size(522, 234);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "待合并列表";
+            this.groupBox2.Text = "待合并文件列表（支持图片和pdf文件，双击列表项预览pdf文件）";
             // 
             // listBoxMerge
             // 
@@ -325,13 +312,15 @@
             this.listBoxMerge.ItemHeight = 15;
             this.listBoxMerge.Location = new System.Drawing.Point(3, 21);
             this.listBoxMerge.Name = "listBoxMerge";
-            this.listBoxMerge.Size = new System.Drawing.Size(516, 229);
+            this.listBoxMerge.Size = new System.Drawing.Size(516, 210);
             this.listBoxMerge.TabIndex = 0;
             this.listBoxMerge.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxMerge_MouseDoubleClick);
             this.listBoxMerge.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listBoxMerge_MouseMove);
             // 
             // groupBoxSplit
             // 
+            this.groupBoxSplit.Controls.Add(this.chbSplitAll);
+            this.groupBoxSplit.Controls.Add(this.label16);
             this.groupBoxSplit.Controls.Add(this.chAutoChecked);
             this.groupBoxSplit.Controls.Add(this.btnViewPdfSplit);
             this.groupBoxSplit.Controls.Add(this.lbSplitMsg);
@@ -345,15 +334,25 @@
             this.groupBoxSplit.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxSplit.Location = new System.Drawing.Point(3, 3);
             this.groupBoxSplit.Name = "groupBoxSplit";
-            this.groupBoxSplit.Size = new System.Drawing.Size(792, 192);
+            this.groupBoxSplit.Size = new System.Drawing.Size(792, 212);
             this.groupBoxSplit.TabIndex = 1;
             this.groupBoxSplit.TabStop = false;
             this.groupBoxSplit.Text = "分拆";
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.Color.Blue;
+            this.label16.Location = new System.Drawing.Point(263, 105);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(202, 15);
+            this.label16.TabIndex = 10;
+            this.label16.Text = "分拆后会生成对应数量的文件";
+            // 
             // chAutoChecked
             // 
             this.chAutoChecked.AutoSize = true;
-            this.chAutoChecked.Location = new System.Drawing.Point(123, 133);
+            this.chAutoChecked.Location = new System.Drawing.Point(123, 157);
             this.chAutoChecked.Name = "chAutoChecked";
             this.chAutoChecked.Size = new System.Drawing.Size(179, 19);
             this.chAutoChecked.TabIndex = 9;
@@ -364,7 +363,7 @@
             // 
             this.btnViewPdfSplit.Location = new System.Drawing.Point(654, 38);
             this.btnViewPdfSplit.Name = "btnViewPdfSplit";
-            this.btnViewPdfSplit.Size = new System.Drawing.Size(75, 29);
+            this.btnViewPdfSplit.Size = new System.Drawing.Size(75, 30);
             this.btnViewPdfSplit.TabIndex = 8;
             this.btnViewPdfSplit.Text = "预览";
             this.btnViewPdfSplit.UseVisualStyleBackColor = true;
@@ -374,7 +373,7 @@
             // 
             this.lbSplitMsg.AutoSize = true;
             this.lbSplitMsg.ForeColor = System.Drawing.Color.Red;
-            this.lbSplitMsg.Location = new System.Drawing.Point(17, 161);
+            this.lbSplitMsg.Location = new System.Drawing.Point(17, 182);
             this.lbSplitMsg.Name = "lbSplitMsg";
             this.lbSplitMsg.Size = new System.Drawing.Size(31, 15);
             this.lbSplitMsg.TabIndex = 7;
@@ -385,6 +384,7 @@
             // 
             this.btnSplitPdf.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.btnSplitPdf.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSplitPdf.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnSplitPdf.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
             this.btnSplitPdf.Location = new System.Drawing.Point(552, 73);
             this.btnSplitPdf.Name = "btnSplitPdf";
@@ -426,7 +426,7 @@
             this.btnSelectPdf.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
             this.btnSelectPdf.Location = new System.Drawing.Point(551, 38);
             this.btnSelectPdf.Name = "btnSelectPdf";
-            this.btnSelectPdf.Size = new System.Drawing.Size(97, 29);
+            this.btnSelectPdf.Size = new System.Drawing.Size(97, 30);
             this.btnSelectPdf.TabIndex = 2;
             this.btnSelectPdf.Text = "选择文件";
             this.btnSelectPdf.UseVisualStyleBackColor = true;
@@ -453,6 +453,7 @@
             // tabPageWatermark
             // 
             this.tabPageWatermark.Controls.Add(this.groupBoxWatermark);
+            this.tabPageWatermark.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabPageWatermark.Location = new System.Drawing.Point(104, 4);
             this.tabPageWatermark.Name = "tabPageWatermark";
             this.tabPageWatermark.Size = new System.Drawing.Size(798, 509);
@@ -485,7 +486,7 @@
             // 
             this.btnWaterViewPdf.Location = new System.Drawing.Point(677, 36);
             this.btnWaterViewPdf.Name = "btnWaterViewPdf";
-            this.btnWaterViewPdf.Size = new System.Drawing.Size(75, 29);
+            this.btnWaterViewPdf.Size = new System.Drawing.Size(75, 30);
             this.btnWaterViewPdf.TabIndex = 11;
             this.btnWaterViewPdf.Text = "预览";
             this.btnWaterViewPdf.UseVisualStyleBackColor = true;
@@ -494,6 +495,16 @@
             // numAngle
             // 
             this.numAngle.Location = new System.Drawing.Point(136, 103);
+            this.numAngle.Maximum = new decimal(new int[] {
+            90,
+            0,
+            0,
+            0});
+            this.numAngle.Minimum = new decimal(new int[] {
+            90,
+            0,
+            0,
+            -2147483648});
             this.numAngle.Name = "numAngle";
             this.numAngle.Size = new System.Drawing.Size(120, 25);
             this.numAngle.TabIndex = 10;
@@ -537,6 +548,8 @@
             // 
             // btnDoWatermark
             // 
+            this.btnDoWatermark.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnDoWatermark.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnDoWatermark.Location = new System.Drawing.Point(586, 71);
             this.btnDoWatermark.Name = "btnDoWatermark";
             this.btnDoWatermark.Size = new System.Drawing.Size(166, 57);
@@ -565,7 +578,7 @@
             // 
             this.btnSelectWatermarkPdf.Location = new System.Drawing.Point(586, 36);
             this.btnSelectWatermarkPdf.Name = "btnSelectWatermarkPdf";
-            this.btnSelectWatermarkPdf.Size = new System.Drawing.Size(85, 28);
+            this.btnSelectWatermarkPdf.Size = new System.Drawing.Size(85, 30);
             this.btnSelectWatermarkPdf.TabIndex = 2;
             this.btnSelectWatermarkPdf.Text = "选择文件";
             this.btnSelectWatermarkPdf.UseVisualStyleBackColor = true;
@@ -593,11 +606,12 @@
             // 
             this.tabPageEncryption.Controls.Add(this.groupBoxDecrypt);
             this.tabPageEncryption.Controls.Add(this.groupBoxEncrypt);
+            this.tabPageEncryption.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabPageEncryption.Location = new System.Drawing.Point(104, 4);
             this.tabPageEncryption.Name = "tabPageEncryption";
             this.tabPageEncryption.Size = new System.Drawing.Size(798, 509);
             this.tabPageEncryption.TabIndex = 3;
-            this.tabPageEncryption.Text = "加密";
+            this.tabPageEncryption.Text = "加密/解密";
             this.tabPageEncryption.UseVisualStyleBackColor = true;
             // 
             // groupBoxDecrypt
@@ -619,9 +633,9 @@
             // 
             // btnViewDecryptPdf
             // 
-            this.btnViewDecryptPdf.Location = new System.Drawing.Point(664, 45);
+            this.btnViewDecryptPdf.Location = new System.Drawing.Point(664, 44);
             this.btnViewDecryptPdf.Name = "btnViewDecryptPdf";
-            this.btnViewDecryptPdf.Size = new System.Drawing.Size(75, 29);
+            this.btnViewDecryptPdf.Size = new System.Drawing.Size(75, 30);
             this.btnViewDecryptPdf.TabIndex = 13;
             this.btnViewDecryptPdf.Text = "预览";
             this.btnViewDecryptPdf.UseVisualStyleBackColor = true;
@@ -629,9 +643,10 @@
             // 
             // btnRemovePassProtect
             // 
-            this.btnRemovePassProtect.Location = new System.Drawing.Point(583, 81);
+            this.btnRemovePassProtect.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnRemovePassProtect.Location = new System.Drawing.Point(563, 80);
             this.btnRemovePassProtect.Name = "btnRemovePassProtect";
-            this.btnRemovePassProtect.Size = new System.Drawing.Size(156, 57);
+            this.btnRemovePassProtect.Size = new System.Drawing.Size(176, 62);
             this.btnRemovePassProtect.TabIndex = 11;
             this.btnRemovePassProtect.Text = "移除密码";
             this.btnRemovePassProtect.UseVisualStyleBackColor = true;
@@ -658,7 +673,7 @@
             // 
             this.btnDecryptPdf.Location = new System.Drawing.Point(563, 44);
             this.btnDecryptPdf.Name = "btnDecryptPdf";
-            this.btnDecryptPdf.Size = new System.Drawing.Size(95, 31);
+            this.btnDecryptPdf.Size = new System.Drawing.Size(95, 30);
             this.btnDecryptPdf.TabIndex = 5;
             this.btnDecryptPdf.Text = "选择文件";
             this.btnDecryptPdf.UseVisualStyleBackColor = true;
@@ -705,7 +720,7 @@
             // 
             this.btnViewEncryptPdf.Location = new System.Drawing.Point(664, 43);
             this.btnViewEncryptPdf.Name = "btnViewEncryptPdf";
-            this.btnViewEncryptPdf.Size = new System.Drawing.Size(75, 29);
+            this.btnViewEncryptPdf.Size = new System.Drawing.Size(75, 30);
             this.btnViewEncryptPdf.TabIndex = 12;
             this.btnViewEncryptPdf.Text = "预览";
             this.btnViewEncryptPdf.UseVisualStyleBackColor = true;
@@ -723,9 +738,10 @@
             // 
             // btnEncryptProtect
             // 
-            this.btnEncryptProtect.Location = new System.Drawing.Point(583, 85);
+            this.btnEncryptProtect.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnEncryptProtect.Location = new System.Drawing.Point(563, 82);
             this.btnEncryptProtect.Name = "btnEncryptProtect";
-            this.btnEncryptProtect.Size = new System.Drawing.Size(156, 56);
+            this.btnEncryptProtect.Size = new System.Drawing.Size(176, 59);
             this.btnEncryptProtect.TabIndex = 10;
             this.btnEncryptProtect.Text = "添加密码";
             this.btnEncryptProtect.UseVisualStyleBackColor = true;
@@ -769,7 +785,7 @@
             // 
             this.btnEncryptPdf.Location = new System.Drawing.Point(563, 43);
             this.btnEncryptPdf.Name = "btnEncryptPdf";
-            this.btnEncryptPdf.Size = new System.Drawing.Size(95, 29);
+            this.btnEncryptPdf.Size = new System.Drawing.Size(95, 30);
             this.btnEncryptPdf.TabIndex = 5;
             this.btnEncryptPdf.Text = "选择文件";
             this.btnEncryptPdf.UseVisualStyleBackColor = true;
@@ -791,6 +807,35 @@
             this.label8.Size = new System.Drawing.Size(82, 15);
             this.label8.TabIndex = 3;
             this.label8.Text = "选择文件：";
+            // 
+            // imageListMain
+            // 
+            this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
+            this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListMain.Images.SetKeyName(0, "Home.png");
+            // 
+            // chbSplitAll
+            // 
+            this.chbSplitAll.AutoSize = true;
+            this.chbSplitAll.Location = new System.Drawing.Point(123, 132);
+            this.chbSplitAll.Name = "chbSplitAll";
+            this.chbSplitAll.Size = new System.Drawing.Size(89, 19);
+            this.chbSplitAll.TabIndex = 11;
+            this.chbSplitAll.Text = "逐页分拆";
+            this.chbSplitAll.UseVisualStyleBackColor = true;
+            this.chbSplitAll.CheckedChanged += new System.EventHandler(this.chbSplitAll_CheckedChanged);
+            // 
+            // lbEmail
+            // 
+            this.lbEmail.AutoSize = true;
+            this.lbEmail.LinkVisited = true;
+            this.lbEmail.Location = new System.Drawing.Point(598, 448);
+            this.lbEmail.Name = "lbEmail";
+            this.lbEmail.Size = new System.Drawing.Size(135, 15);
+            this.lbEmail.TabIndex = 3;
+            this.lbEmail.TabStop = true;
+            this.lbEmail.Text = "513705971@qq.com";
+            this.lbEmail.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbEmail_LinkClicked);
             // 
             // MainForm
             // 
@@ -891,14 +936,16 @@
         private System.Windows.Forms.TextBox tDecryptEditPass;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button btnRemovePassProtect;
-        private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Button btnViewPdfSplit;
         private System.Windows.Forms.CheckBox chAutoChecked;
-        private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Button btnWaterViewPdf;
         private System.Windows.Forms.Button btnViewEncryptPdf;
         private System.Windows.Forms.Button btnViewDecryptPdf;
         private System.Windows.Forms.ToolTip toolTipMain;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.ImageList imageListMain;
+        private System.Windows.Forms.CheckBox chbSplitAll;
+        private System.Windows.Forms.LinkLabel lbEmail;
     }
 }
 

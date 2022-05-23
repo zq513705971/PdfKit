@@ -43,8 +43,18 @@ namespace PdfKit
             sf.LineAlignment = StringAlignment.Center;
             sf.Alignment = StringAlignment.Center;
             Font font = this.tabControlMain.Font;
-            SolidBrush brush = new SolidBrush(System.Drawing.Color.Black);//绘制边框的画笔
+            SolidBrush brush = new SolidBrush(System.Drawing.Color.Black);
+            if (e.Index == this.tabControlMain.SelectedIndex)
+            {
+                brush = new SolidBrush(System.Drawing.Color.Blue);//绘制边框的画笔
+
+                System.Drawing.Rectangle rec = this.tabControlMain.GetTabRect(e.Index);
+                SolidBrush active = new SolidBrush(System.Drawing.Color.LightYellow);
+                e.Graphics.FillRectangle(active, rec);
+            }
             g.DrawString(((TabControl)(sender)).TabPages[e.Index].Text, font, brush, tabTextArea, sf);
+
+
         }
 
         private void btnSelectPdf_Click(object sender, EventArgs e)
@@ -73,9 +83,9 @@ namespace PdfKit
             string pdfPath = tPdfPath.Text;
             string numPages = tPdfPages.Text;
 
-            if (string.IsNullOrEmpty(pdfPath) || string.IsNullOrEmpty(numPages))
+            if (string.IsNullOrEmpty(pdfPath) || (string.IsNullOrEmpty(numPages) && !chbSplitAll.Checked))
             {
-                MessageBox.Show("请选择待分拆Pdf文件，并按格式录入页码范围！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("请选择待分拆Pdf文件，并按格式录入页码范围或选择逐页分拆！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (!File.Exists(pdfPath))
@@ -84,48 +94,55 @@ namespace PdfKit
                 return;
             }
             string pdfDir = System.IO.Path.GetDirectoryName(pdfPath);
-            string[] pages = numPages.Split(',');
             List<Common.PageRange> pageNums = new List<Common.PageRange>();
-            try
-            {
-                foreach (string page in pages)
-                {
-                    int num = -1;
-                    if (int.TryParse(page, out num))
-                    {
-                        pageNums.Add(new Common.PageRange(num));
-                        continue;
-                    }
-                    else if (page.Contains("-"))
-                    {
-                        string[] subPages = page.Split('-');
-                        if (subPages.Length != 2)
-                        {
-                            throw new Exception("");
-                        }
-                        int start = int.Parse(subPages[0]);
-                        int end = int.Parse(subPages[1]);
 
-                        pageNums.Add(new Common.PageRange(start, end));
-                        continue;
+            if (!chbSplitAll.Checked)
+            {
+                string[] pages = numPages.Split(',');
+                try
+                {
+                    foreach (string page in pages)
+                    {
+                        int num = -1;
+                        if (int.TryParse(page, out num))
+                        {
+                            pageNums.Add(new Common.PageRange(num));
+                            continue;
+                        }
+                        else if (page.Contains("-"))
+                        {
+                            string[] subPages = page.Split('-');
+                            if (subPages.Length != 2)
+                            {
+                                throw new Exception("");
+                            }
+                            int start = int.Parse(subPages[0]);
+                            int end = int.Parse(subPages[1]);
+
+                            pageNums.Add(new Common.PageRange(start, end));
+                            continue;
+                        }
+                        throw new Exception("");
                     }
-                    throw new Exception("");
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("页码范围有误，请重新输入！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
             }
-            catch (Exception)
-            {
-                MessageBox.Show("页码范围有误，请重新输入！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            btnSelectPdf.Enabled = false;
-            tPdfPages.Enabled = false;
-            tPdfPath.Enabled = false;
+            groupBoxSplit.Enabled = false;
             lbSplitMsg.Text = "开始处理...";
             lbSplitMsg.Visible = true;
             Utils.RunBackgroundWorker(backgroundWorkerSplit, (sender1, e1) =>
             {
                 PdfDocument pdfDocument = new PdfDocument(new PdfReader(new FileStream(pdfPath, FileMode.Open, FileAccess.Read, FileShare.Read)));
                 int totalPages = pdfDocument.GetNumberOfPages();
+                if (chbSplitAll.Checked)
+                {
+                    for (int index = 1; index <= totalPages; index++)
+                        pageNums.Add(new Common.PageRange(index));
+                }
 
                 string dirPath = string.Format("{0}/{1}", pdfDir, System.IO.Path.GetFileNameWithoutExtension(pdfPath));
                 if (!Directory.Exists(dirPath))
@@ -166,15 +183,13 @@ namespace PdfKit
                 lbSplitMsg.Text = "处理完成！";
                 MessageBox.Show("处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 lbSplitMsg.Visible = false;
-                btnSelectPdf.Enabled = true;
-                tPdfPages.Enabled = true;
-                tPdfPath.Enabled = true;
+                groupBoxSplit.Enabled = true;
             });
         }
 
         private void btnMergeAdd_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog() { Multiselect = true, Filter = "文件|*.pdf;*.gif;*.jpg;*.jpeg;*.bmp;*.jfif;*.png;" })
+            using (OpenFileDialog openFileDialog = new OpenFileDialog() { Multiselect = true, Filter = "文件|*.pdf;*.gif;*.jpg;*.jpeg;*.bmp;*.jfif;*.png;|PDF文件|*.pdf|图片文件|*.gif;*.jpg;*.jpeg;*.bmp;*.jfif;*.png;" })
             {
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -218,6 +233,7 @@ namespace PdfKit
             }
             listBoxMerge.Items.Remove(item);
             listBoxMerge.Items.Insert(index - 1, item);
+            listBoxMerge.SelectedIndex = index - 1;
         }
 
         private void btnMoveDown_Click(object sender, EventArgs e)
@@ -236,20 +252,23 @@ namespace PdfKit
             }
             listBoxMerge.Items.Remove(item);
             listBoxMerge.Items.Insert(index + 1, item);
+            listBoxMerge.SelectedIndex = index + 1;
         }
 
         private void btnMergePdf_Click(object sender, EventArgs e)
         {
-            if (listBoxMerge.Items.Count <= 1)
+            if (listBoxMerge.Items.Count < 1)
             {
-                MessageBox.Show("请添加至少2个文件！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("请添加至少1个文件！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             string savePath = System.IO.Path.GetTempPath();
             lbMergeMsg.Text = "开始合并文件...";
             lbMergeMsg.Visible = true;
             groupBoxMerge.Enabled = false;
-            string mergedPdf = string.Format("{0}/merged_{1:HHmmss}.pdf", savePath, DateTime.Now);
+            string mergedPdf = string.Format("{0}/{1}.pdf", savePath, Guid.NewGuid());
+            if (File.Exists(mergedPdf))
+                File.Delete(mergedPdf);
             Utils.RunBackgroundWorker(backgroundWorkerMerge, (sender1, e1) =>
             {
                 PdfWriter pdfWriter = new PdfWriter(mergedPdf);
@@ -281,9 +300,7 @@ namespace PdfKit
 
                 lbMergeMsg.Visible = false;
 
-                this.showPdfFiew(mergedPdf);
-
-                MessageBox.Show("处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.showPdfFiew(mergedPdf, "预览合并后文件（请点击下列的图标进行操作！）");
             });
         }
 
@@ -349,7 +366,9 @@ namespace PdfKit
                 return;
             }
             string srcPdf = tWatermarkPdf.Text;
-            string targetPdf = string.Format("{0}/{1}_watermark.pdf", System.IO.Path.GetTempPath(), System.IO.Path.GetFileNameWithoutExtension(srcPdf));
+            string targetPdf = string.Format("{0}/{1}.pdf", System.IO.Path.GetTempPath(), Guid.NewGuid());
+            if (File.Exists(targetPdf))
+                File.Delete(targetPdf);
             string markStr = tWatermark.Text;
             int fontSize = Decimal.ToInt32(numFontSize.Value);
             groupBoxWatermark.Enabled = false;
@@ -396,8 +415,7 @@ namespace PdfKit
             }, (s2, e2) =>
             {
                 groupBoxWatermark.Enabled = true;
-                this.showPdfFiew(targetPdf);
-                MessageBox.Show("处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.showPdfFiew(targetPdf, "预览加水印文件（请点击下列的图标进行操作！）");
             });
 
         }
@@ -527,14 +545,14 @@ namespace PdfKit
             }
         }
 
-        private void showPdfFiew(string path)
+        private void showPdfFiew(string path, string title = null)
         {
             if (System.IO.Path.GetExtension(path).ToUpper() != ".PDF")
             {
                 MessageBox.Show("无法预览非Pdf文件！", "异常", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            PdfViewerForm pdfViewerForm = new PdfViewerForm(path);
+            PdfViewerForm pdfViewerForm = new PdfViewerForm(path, title);
             pdfViewerForm.Show();
         }
 
@@ -563,6 +581,18 @@ namespace PdfKit
                     toolTipMain.SetToolTip(listBoxMerge, listBoxMerge.Items[index].ToString());
                 }
             }
+        }
+
+        private void chbSplitAll_CheckedChanged(object sender, EventArgs e)
+        {
+            tPdfPages.Enabled = !chbSplitAll.Checked;
+        }
+
+        private void lbEmail_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process proc = new System.Diagnostics.Process();
+            proc.StartInfo.FileName = "mailto:513705971@qq.com?subject=【PdfKit工具】&body=";
+            proc.Start();
         }
     }
 }

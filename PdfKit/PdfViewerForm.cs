@@ -14,11 +14,16 @@ namespace PdfKit
     public partial class PdfViewerForm : Form
     {
         private string pdfName;
-        public PdfViewerForm(string pdfName)
+        private string title;
+        public PdfViewerForm(string pdfName, string title)
         {
             InitializeComponent();
 
             this.pdfName = pdfName;
+            this.title = title;
+            if (string.IsNullOrEmpty(title))
+                this.title = this.pdfName; 
+            this.Text = this.title;
         }
 
         private void PdfViewerForm_Load(object sender, EventArgs e)
@@ -30,8 +35,7 @@ namespace PdfKit
         {
             try
             {
-                pdfViewerMain.Document = PdfiumViewer.PdfDocument.Load(path);
-                this.Text = Path.GetFileName(path);
+                pdfViewerMain.Document = PdfiumViewer.PdfDocument.Load(path);               
             }
             catch (Exception ex)
             {
@@ -42,6 +46,7 @@ namespace PdfKit
         private void pdfViewerMain_DragEnter(object sender, DragEventArgs e)
         {
             string path = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
+            this.Text = Path.GetFileName(path);
             showPdf(path);
         }
     }
