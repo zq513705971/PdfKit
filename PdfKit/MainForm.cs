@@ -1,13 +1,17 @@
 ﻿using iText.IO.Font;
 using iText.IO.Font.Constants;
+using iText.IO.Image;
+using iText.IO.Source;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
+using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Kernel.Pdf.Extgstate;
 using iText.Kernel.Pdf.Layer;
 using iText.Kernel.Utils;
 using iText.Layout;
+using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using System;
@@ -32,7 +36,7 @@ namespace PdfKit
 
         private void tabControlMain_DrawItem(object sender, DrawItemEventArgs e)
         {
-            Rectangle tabArea = tabControlMain.GetTabRect(e.Index);//主要是做个转换来获得TAB项的RECTANGELF
+            System.Drawing.Rectangle tabArea = tabControlMain.GetTabRect(e.Index);//主要是做个转换来获得TAB项的RECTANGELF
             RectangleF tabTextArea = (RectangleF)(tabControlMain.GetTabRect(e.Index));
             Graphics g = e.Graphics;
             StringFormat sf = new StringFormat();//封装文本布局信息
@@ -79,7 +83,7 @@ namespace PdfKit
                 MessageBox.Show("当前文件不存在，请重新选择！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            string pdfDir = Path.GetDirectoryName(pdfPath);
+            string pdfDir = System.IO.Path.GetDirectoryName(pdfPath);
             string[] pages = numPages.Split(',');
             List<Common.PageRange> pageNums = new List<Common.PageRange>();
             try
@@ -123,10 +127,11 @@ namespace PdfKit
                 PdfDocument pdfDocument = new PdfDocument(new PdfReader(new FileStream(pdfPath, FileMode.Open, FileAccess.Read, FileShare.Read)));
                 int totalPages = pdfDocument.GetNumberOfPages();
 
-                string dirPath = string.Format("{0}/{1}", pdfDir, Path.GetFileNameWithoutExtension(pdfPath));
+                string dirPath = string.Format("{0}/{1}", pdfDir, System.IO.Path.GetFileNameWithoutExtension(pdfPath));
                 if (!Directory.Exists(dirPath))
                     Directory.CreateDirectory(dirPath);
 
+                bool autoAddMerge = chAutoChecked.Checked;
                 foreach (Common.PageRange pageRange in pageNums)
                 {
                     int start = pageRange.start;
@@ -135,13 +140,14 @@ namespace PdfKit
                     if (start > end)
                         continue;
 
-
-                    string pdf = string.Format("{0}/{1}/{2}.pdf", pdfDir, Path.GetFileNameWithoutExtension(pdfPath), pageRange.ToString());
+                    string pdf = string.Format("{0}/{1}/{2}.pdf", pdfDir, System.IO.Path.GetFileNameWithoutExtension(pdfPath), pageRange.ToString());
                     if (File.Exists(pdf))
                         File.Delete(pdf);
                     Utils.Invoke(lbSplitMsg, () =>
                     {
-                        lbSplitMsg.Text = string.Format("正在处理 {0}", Path.GetFileName(pdf));
+                        lbSplitMsg.Text = string.Format("正在处理 {0}", System.IO.Path.GetFileName(pdf));
+                        if (autoAddMerge)
+                            listBoxMerge.Items.Add(pdf);
                     });
 
                     PdfWriter pdfWriter = new PdfWriter(pdf);
@@ -157,8 +163,8 @@ namespace PdfKit
 
             }, (sender3, e3) =>
             {
-                MessageBox.Show("处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 lbSplitMsg.Text = "处理完成！";
+                MessageBox.Show("处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 lbSplitMsg.Visible = false;
                 btnSelectPdf.Enabled = true;
                 tPdfPages.Enabled = true;
@@ -168,11 +174,14 @@ namespace PdfKit
 
         private void btnMergeAdd_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = "Pdf文件|*.pdf" })
+            using (OpenFileDialog openFileDialog = new OpenFileDialog() { Multiselect = true, Filter = "文件|*.pdf;*.gif;*.jpg;*.jpeg;*.bmp;*.jfif;*.png;" })
             {
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    listBoxMerge.Items.Add(openFileDialog.FileName);
+                    foreach (string file in openFileDialog.FileNames)
+                    {
+                        listBoxMerge.Items.Add(openFileDialog.FileName);
+                    }
                 }
             }
         }
@@ -233,29 +242,16 @@ namespace PdfKit
         {
             if (listBoxMerge.Items.Count <= 1)
             {
-                MessageBox.Show("请添加至少2个pdf文件！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("请添加至少2个文件！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            string savePath = "";
-            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog()
-            {
-                ShowNewFolderButton = true,
-                RootFolder = Environment.SpecialFolder.DesktopDirectory,
-                Description = "请选择文件合并后存放的路径"
-            })
-            {
-                if (folderBrowserDialog.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
-                savePath = folderBrowserDialog.SelectedPath;
-            }
+            string savePath = System.IO.Path.GetTempPath();
             lbMergeMsg.Text = "开始合并文件...";
             lbMergeMsg.Visible = true;
             groupBoxMerge.Enabled = false;
+            string mergedPdf = string.Format("{0}/merged_{1:HHmmss}.pdf", savePath, DateTime.Now);
             Utils.RunBackgroundWorker(backgroundWorkerMerge, (sender1, e1) =>
             {
-                string mergedPdf = string.Format("{0}/merged_{1:HHmmss}.pdf", savePath, DateTime.Now);
                 PdfWriter pdfWriter = new PdfWriter(mergedPdf);
                 PdfDocument pdfWriterDoc = new PdfDocument(pdfWriter);
 
@@ -264,20 +260,54 @@ namespace PdfKit
                 {
                     Utils.Invoke(lbSplitMsg, () =>
                     {
-                        lbMergeMsg.Text = string.Format("正在处理 {0}", Path.GetFileName(item.ToString()));
+                        lbMergeMsg.Text = string.Format("正在处理 {0}", System.IO.Path.GetFileName(item.ToString()));
                     });
-                    PdfDocument pdfDoc = new PdfDocument(new PdfReader(item.ToString()));
+                    PdfDocument pdfDoc = null;
+                    if (System.IO.Path.GetExtension(item.ToString()).ToUpper() != ".PDF")
+                    {
+                        string tempPdf = imageToPdf(item.ToString());
+                        pdfDoc = new PdfDocument(new PdfReader(tempPdf));
+                    }
+                    else
+                        pdfDoc = new PdfDocument(new PdfReader(item.ToString()));
                     merger.Merge(pdfDoc, 1, pdfDoc.GetNumberOfPages());
                     pdfDoc.Close();
                 }
                 pdfWriterDoc.Close();
             }, (s2, e2) =>
             {
+                lbMergeMsg.Text = "处理完成!";
                 groupBoxMerge.Enabled = true;
-                MessageBox.Show("处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                lbMergeMsg.Visible = false;
-            });
 
+                lbMergeMsg.Visible = false;
+
+                this.showPdfFiew(mergedPdf);
+
+                MessageBox.Show("处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            });
+        }
+
+        private string imageToPdf(string imagePdf)
+        {
+            string pdfName = string.Format("{0}/{1}.pdf", System.IO.Path.GetTempPath(), System.IO.Path.GetFileNameWithoutExtension(imagePdf));
+            PdfWriter writer = new PdfWriter(pdfName);
+            PdfDocument pdfDoc = new PdfDocument(writer);
+            ImageData data = ImageDataFactory.Create(imagePdf);
+            iText.Layout.Element.Image img = new iText.Layout.Element.Image(data);
+            img.SetBorder(Border.NO_BORDER);
+            float imgWidth = img.GetImageWidth();
+            float imgHeight = img.GetImageHeight();
+            img.SetFixedPosition(0, 0);
+            iText.Kernel.Geom.Rectangle rect = new iText.Kernel.Geom.Rectangle(imgWidth, imgHeight);
+            PageSize pagesize = new PageSize(rect);
+            pdfDoc.SetDefaultPageSize(pagesize);
+            Document document = new Document(pdfDoc, pagesize);
+            document.SetMargins(0, 0, 0, 0);
+            document.Add(img);
+
+            document.Close();
+
+            return pdfName;
         }
 
         private void btnSelectWatermarkPdf_Click(object sender, EventArgs e)
@@ -319,7 +349,7 @@ namespace PdfKit
                 return;
             }
             string srcPdf = tWatermarkPdf.Text;
-            string targetPdf = string.Format("{0}/{1}_watermark.pdf", Path.GetDirectoryName(srcPdf), Path.GetFileNameWithoutExtension(srcPdf));
+            string targetPdf = string.Format("{0}/{1}_watermark.pdf", System.IO.Path.GetTempPath(), System.IO.Path.GetFileNameWithoutExtension(srcPdf));
             string markStr = tWatermark.Text;
             int fontSize = Decimal.ToInt32(numFontSize.Value);
             groupBoxWatermark.Enabled = false;
@@ -366,6 +396,7 @@ namespace PdfKit
             }, (s2, e2) =>
             {
                 groupBoxWatermark.Enabled = true;
+                this.showPdfFiew(targetPdf);
                 MessageBox.Show("处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             });
 
@@ -418,7 +449,7 @@ namespace PdfKit
                 byte[] OWNERPASS = Encoding.Default.GetBytes(this.tEncryptEditPass.Text);
 
                 writerProperties.SetStandardEncryption(USERPASS, OWNERPASS, EncryptionConstants.ALLOW_PRINTING, EncryptionConstants.ENCRYPTION_AES_256);
-                pdfWriter = new PdfWriter(new FileStream(string.Format("{0}/{1}_protected.pdf", Path.GetDirectoryName(pdfPath), Path.GetFileNameWithoutExtension(pdfPath)), FileMode.Create), writerProperties);
+                pdfWriter = new PdfWriter(new FileStream(string.Format("{0}/{1}_protected.pdf", System.IO.Path.GetDirectoryName(pdfPath), System.IO.Path.GetFileNameWithoutExtension(pdfPath)), FileMode.Create), writerProperties);
                 pdfDocument = new PdfDocument(pdfReader, pdfWriter);
                 pdfDocument.Close();
                 MessageBox.Show("处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -458,7 +489,7 @@ namespace PdfKit
 
                 ReaderProperties readerProperties = new ReaderProperties().SetPassword(OWNERPASS);
                 pdfReader = new PdfReader(pdfPath, readerProperties);
-                pdfWriter = new PdfWriter(new FileStream(string.Format("{0}/{1}_unlocked.pdf", Path.GetDirectoryName(pdfPath), Path.GetFileNameWithoutExtension(pdfPath)), FileMode.Create));
+                pdfWriter = new PdfWriter(new FileStream(string.Format("{0}/{1}_unlocked.pdf", System.IO.Path.GetDirectoryName(pdfPath), System.IO.Path.GetFileNameWithoutExtension(pdfPath)), FileMode.Create));
                 pdfDocument = new PdfDocument(pdfReader, pdfWriter);
                 pdfDocument.Close();
                 MessageBox.Show("处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -475,19 +506,63 @@ namespace PdfKit
                     pdfReader.Close();
             }
         }
-        
-        private void pdfViewerMain_DragEnter(object sender, DragEventArgs e)
+
+        private void panelHome_DragEnter(object sender, DragEventArgs e)
         {
-            try
-            {
-                string path = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
-                pdfViewerMain.Document = PdfiumViewer.PdfDocument.Load(path);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "异常", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            string path = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
+            this.showPdfFiew(path);
         }
-        
+
+        private void btnViewPdfSplit_Click(object sender, EventArgs e)
+        {
+            this.showPdfFiew(tPdfPath.Text);
+        }
+
+        private void listBoxMerge_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            int index = this.listBoxMerge.IndexFromPoint(e.Location);
+            if (index != System.Windows.Forms.ListBox.NoMatches)
+            {
+                this.showPdfFiew(listBoxMerge.SelectedItem.ToString());
+            }
+        }
+
+        private void showPdfFiew(string path)
+        {
+            if (System.IO.Path.GetExtension(path).ToUpper() != ".PDF")
+            {
+                MessageBox.Show("无法预览非Pdf文件！", "异常", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            PdfViewerForm pdfViewerForm = new PdfViewerForm(path);
+            pdfViewerForm.Show();
+        }
+
+        private void btnWaterViewPdf_Click(object sender, EventArgs e)
+        {
+            this.showPdfFiew(tWatermarkPdf.Text);
+        }
+
+        private void btnViewDecryptPdf_Click(object sender, EventArgs e)
+        {
+            this.showPdfFiew(tDecryptPdf.Text);
+        }
+
+        private void btnViewEncryptPdf_Click(object sender, EventArgs e)
+        {
+            this.showPdfFiew(tEncryptPdf.Text);
+        }
+
+        private void listBoxMerge_MouseMove(object sender, MouseEventArgs e)
+        {
+            int index = listBoxMerge.IndexFromPoint(e.Location);
+            if (index != -1 && index < listBoxMerge.Items.Count)
+            {
+                if (toolTipMain.GetToolTip(listBoxMerge) != listBoxMerge.Items[index].ToString())
+                {
+                    toolTipMain.SetToolTip(listBoxMerge, listBoxMerge.Items[index].ToString());
+                }
+            }
+        }
     }
 }
